@@ -1,1 +1,1 @@
-worker: python main.py
+slowworker:   QUEUE=*   bundle exec python main.py resque:work
