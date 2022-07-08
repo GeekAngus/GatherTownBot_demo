@@ -3,7 +3,7 @@
 
 import discord
 import os
-#from keep_alive import keep_alive
+from keep_alive import keep_alive
 
 
 client = discord.Client()
@@ -106,7 +106,7 @@ async def on_raw_reaction_add(payload):
         if str(payload.emoji) == k: 
           await member.send(ra_msg_dict[k])
 
-#keep_alive()
+keep_alive()
 
 try:
     client.run(os.getenv("TOKEN"))
