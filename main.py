@@ -88,7 +88,7 @@ async def on_message(message):
         g_msg_id = msg.id
         print({g_msg_id})
         #ra_list = ['\U0001F64F', '\U0001F60D', '\U0001F4B5', '\U0001F4AA']
-        ra_list = [':pray:', ':kissing_heart:', ':dollar:', ':muscle']
+        ra_list = ['pray', 'kissing_heart', 'dollar', 'muscle']
         for ra in ra_list:
             await msg.add_reaction(ra)
     except discord.HTTPException as e:
