@@ -67,11 +67,13 @@ async def on_message(message):
         embed = discord.Embed(title="各種求", color=0x6610f2)
         embed.add_field(name="用以下方式求神明指示",
                         value="""
-                        1. 求事業，請點:pray:\n
+                        1. 求事業，請點\U0001F64F\n
                         2. 求姻緣，請點:kissing_heart:\n
                         3. 求財富，請點:dollar:\n
                         4. 求健康，請點:muscle:
         """)
+        ra_list = ['\U0001F64F', '\U0001F60D', '\U0001F4B5', '\U0001F4AA']
+
 
     if message.content.startswith('$npc_add'):
         embed = discord.Embed(title="各種求", color=0x6610f2)
@@ -82,17 +84,19 @@ async def on_message(message):
                         3. 地圖尋寶，請點:footprints:\n 
                         4. 我有問題，請點:muscle:
         """)        
-        
-    try:
-        msg = await message.channel.send(embed=embed)
-        g_msg_id = msg.id
-        print({g_msg_id})
-        #ra_list = ['\U0001F64F', '\U0001F60D', '\U0001F4B5', '\U0001F4AA']
-        ra_list = ['pray', 'kissing_heart', 'dollar', 'muscle']
-        for ra in ra_list:
-            await msg.add_reaction(ra)
-    except discord.HTTPException as e:
-        print({e})
+        ra_list = ['\U0001F64F', '\U0001F60D', '\U0001F4B5', '\U0001F4AA']
+        #ra_list = ['pray', 'kissing_heart', 'dollar', 'muscle']
+    
+    if embed:
+        try:
+            msg = await message.channel.send(embed=embed)
+            g_msg_id = msg.id
+            print({g_msg_id})
+
+            for ra in ra_list:
+                await msg.add_reaction(ra)
+        except discord.HTTPException as e:
+            print({e})
 
 
 @client.event
