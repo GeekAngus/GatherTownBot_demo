@@ -72,11 +72,23 @@ async def on_message(message):
                         3. 求財富，請點:dollar:\n
                         4. 求健康，請點:muscle:
         """)
+        1. 閒聊得金幣 2. 知識換金幣 3. 尋寶  4. FAQ
+    if message.content.startswith('$npc_add'):
+        embed = discord.Embed(title="各種求", color=0x6610f2)
+        embed.add_field(name="用以下方式與路人互動",
+                        value="""
+                        1. 閒聊得金幣, 請點:dollar:\n
+                        2. 知識換金幣, 請點:pray:\n
+                        3. 地圖尋寶，請點:footprints:\n 
+                        4. 我有問題，請點:muscle:
+        """)        
+        
     try:
         msg = await message.channel.send(embed=embed)
         g_msg_id = msg.id
         print({g_msg_id})
-        ra_list = ['\U0001F64F', '\U0001F60D', '\U0001F4B5', '\U0001F4AA']
+        #ra_list = ['\U0001F64F', '\U0001F60D', '\U0001F4B5', '\U0001F4AA']
+        ra_list = [':pray:', ':kissing_heart:', ':dollar:', ':muscle']
         for ra in ra_list:
             await msg.add_reaction(ra)
     except discord.HTTPException as e:
