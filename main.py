@@ -82,7 +82,7 @@ async def on_message(message):
                         1. 閒聊得金幣, 請點:moneybag:\n
                         2. 知識換金幣, 請點:dollar:\n
                         3. 地圖尋寶，請點:footprints:\n 
-                        4. 我有問題，請點:question:
+                        4. 我有疑問，請點:question:
         """)        
         ra_list = ['\U0001F4B0', '\U0001F4B5', '\U0001F463', '\U00002753']
         #ra_list = ['pray', 'kissing_heart', 'dollar', 'muscle']
@@ -93,7 +93,8 @@ async def on_message(message):
             g_msg_id = msg.id
             print({g_msg_id})
             
-            await message.delete()  #hide the command messages
+            #hide the command messages from user
+            await message.delete()  
             
             for ra in ra_list:
                 await msg.add_reaction(ra)
@@ -116,13 +117,24 @@ async def on_raw_reaction_add(payload):
         return
         
       ra_msg_dict = {
-        '\U0001F64F': 'Please go to XX for high pay jobs!',
-        '\U0001F60D': 'Who is your favorite talker?',
-        '\U0001F4B5': 'Please go to XX for luck!',
-        '\U0001F4AA': 'Please go to XX and take a look at YY'             } 
-      for k in ra_msg_dict:
-        if str(payload.emoji) == k: 
-          await member.send(ra_msg_dict[k])
+        "meo" : 
+            {'\U0001F64F': 'Please go to XX for high pay jobs!',
+            '\U0001F60D': 'Who is your favorite talker?',
+            '\U0001F4B5': 'Please go to XX for luck!',
+            '\U0001F4AA': 'Please go to XX and take a look at YY'
+            },
+        "npc" :
+            {'\U0001F4B0': 'Where r u from ?' , 
+             '\U0001F4B5': 'The highest mountain in Taiwan ?', 
+             '\U0001F463': 'Please go to 玉山', 
+             '\U00002753': 'http://pycon.tw'
+            }
+      }
+    
+      for chan in ra_msg_dict:
+            for k in ra_msg_dict[chan]
+                if str(payload.emoji) == k: 
+                    await member.send(ra_msg_dict[chan][k])
 
 #keep_alive()
 
