@@ -72,7 +72,7 @@ async def on_message(message):
                         3. 求財富，請點:dollar:\n
                         4. 求健康，請點:muscle:
         """)
-        1. 閒聊得金幣 2. 知識換金幣 3. 尋寶  4. FAQ
+
     if message.content.startswith('$npc_add'):
         embed = discord.Embed(title="各種求", color=0x6610f2)
         embed.add_field(name="用以下方式與路人互動",
