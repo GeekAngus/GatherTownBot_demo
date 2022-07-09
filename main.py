@@ -132,7 +132,7 @@ async def on_raw_reaction_add(payload):
       }
     
       for chan in ra_msg_dict:
-            for k in ra_msg_dict[chan]
+            for k in ra_msg_dict[chan]:
                 if str(payload.emoji) == k: 
                     await member.send(ra_msg_dict[chan][k])
 
