@@ -63,11 +63,11 @@ async def on_message(message):
     if message.content.startswith('$hello'):
         await message.channel.send('Hello!')
 
-    if message.content.startswith('$add'):
+    if message.content.startswith('$meo_add'):
         embed = discord.Embed(title="各種求", color=0x6610f2)
         embed.add_field(name="用以下方式求神明指示",
                         value="""
-                        1. 求事業，請點\U0001F64F\n
+                        1. 求事業，請點:pray:\n
                         2. 求姻緣，請點:kissing_heart:\n
                         3. 求財富，請點:dollar:\n
                         4. 求健康，請點:muscle:
@@ -92,7 +92,9 @@ async def on_message(message):
             msg = await message.channel.send(embed=embed)
             g_msg_id = msg.id
             print({g_msg_id})
-
+            
+            await message.delete()  #hide the command messages
+            
             for ra in ra_list:
                 await msg.add_reaction(ra)
         except discord.HTTPException as e:
