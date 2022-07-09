@@ -87,7 +87,7 @@ async def on_message(message):
         ra_list = ['\U0001F64F', '\U0001F60D', '\U0001F4B5', '\U0001F4AA']
         #ra_list = ['pray', 'kissing_heart', 'dollar', 'muscle']
     
-    if embed:
+    if embed is not None:
         try:
             msg = await message.channel.send(embed=embed)
             g_msg_id = msg.id
