@@ -79,12 +79,12 @@ async def on_message(message):
         embed = discord.Embed(title="各種求", color=0x6610f2)
         embed.add_field(name="用以下方式與路人互動",
                         value="""
-                        1. 閒聊得金幣, 請點:dollar:\n
-                        2. 知識換金幣, 請點:pray:\n
+                        1. 閒聊得金幣, 請點:moneybag:\n
+                        2. 知識換金幣, 請點:dollar:\n
                         3. 地圖尋寶，請點:footprints:\n 
-                        4. 我有問題，請點:muscle:
+                        4. 我有問題，請點:question:
         """)        
-        ra_list = ['\U0001F64F', '\U0001F60D', '\U0001F4B5', '\U0001F4AA']
+        ra_list = ['\U0001F4B0', '\U0001F4B5', '\U0001F463', '\U00002753']
         #ra_list = ['pray', 'kissing_heart', 'dollar', 'muscle']
     
     if embed is not None:
