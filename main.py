@@ -145,7 +145,7 @@ async def on_raw_reaction_add(payload):
             if str(payload.emoji) == k:
                 embed = discord.Embed(title='', color=0x6610f2) 
                 embed_field_name = ra_msg_dict[chan][k]['msg_q']
-                embed_field_value = ""
+                embed_field_value = "\n"
                 if ra_msg_dict[chan][k]['msg_t'] == 'q_select' :
                     for opt in ra_msg_dict[chan][k]['options']:
                         embed_field_value += ra_msg_dict[chan][k]['options'][opt]
