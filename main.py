@@ -134,14 +134,29 @@ async def on_raw_reaction_add(payload):
             }
       }
 
-    # Level-1 Questions
+    num_ra_list = ['\U00000031', '\U00000032', '\U00000033', '\U00000034']
+    # Level-1 Selections (Entry questions)
     for chan in ra_msg_dict:
         for k in ra_msg_dict[chan]:
-            if str(payload.emoji) == k: 
-                await member.send(ra_msg_dict[chan][k]['msg_q'])
+            if str(payload.emoji) == k:
+                embed = discord.Embed(title='', color=0x6610f2) 
+                embed_field_name = ra_msg_dict[chan][k]['msg_q']
+                embed_field_value = ""
+                if ra_msg_dict[chan][k]['msg_t'] == 'q_select' :
+                    for opt in ra_msg_dict[chan][k]['options']:
+                        embed_field_value += ra_msg_dict[chan][k]['options'][opt]
+                        embed_field_value += "\n"
                 
+                embed.add_field(name = embed_field_name, value = embed_field_value)
+
+                msg = await member.send(embed=embed)
+
+                if ra_msg_dict[chan][k]['msg_t'] == 'q_select' :
+                    for ra in num_ra_list:
+                        await msg.add_reaction(ra)
+
                 
-    
+    # Level-2 Selections (Answers)
 
 #keep_alive()
 
