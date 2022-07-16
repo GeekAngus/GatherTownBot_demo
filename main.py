@@ -83,12 +83,12 @@ async def on_message(message):
         embed = discord.Embed(title="路人甲", color=0x6610f2)
         embed.add_field(name="用以下方式與路人互動",
                         value="""
-                        1. 閒聊得金幣, 請點:moneybag:\n
-                        2. 知識換金幣, 請點:dollar:\n
-                        3. 地圖尋寶，請點:footprints:\n 
-                        4. 我有疑問，請點:question:
+                        1. 閒聊得金幣, 請點💰\n
+                        2. 知識換金幣, 請點💵\n
+                        3. 地圖尋寶，請點👣\n 
+                        4. 我有疑問，請點❓
         """)        
-        ra_list = ['💰', '\U0001F4B5', '\U0001F463', '\U00002753']
+        ra_list = ['💰', '💵', '👣', '❓']
         #ra_list = ['pray', 'kissing_heart', 'dollar', 'muscle']
     
     if embed is not None:
@@ -119,9 +119,10 @@ async def on_raw_reaction_add(payload):
       member = payload.member
       if member.bot:
         return
-      
-      location = "白金攤位"  
-      ra_msg_dict = {
+
+    # payload.member is null for DM  
+    location = "白金攤位"  
+    ra_msg_dict = {
         "meo" : 
             {
             '\U0001F64F': {'msg_t': 'guide_var', 'msg_q': f"Please go to {location} for high pay jobs !"},
@@ -136,7 +137,7 @@ async def on_raw_reaction_add(payload):
             '\U0001F463': {'msg_t': 'guide_var', 'msg_q': 'Please visit xx in Gather Town, you may find something interesting !'}, 
             '\U00002753': {'msg_t': 'guide_var', 'msg_q': 'http://tw.pycon.org'}
             }
-      }
+    }
 
     num_ra_list = [ '1️⃣', '2️⃣', '3️⃣', '4️⃣' ]
     # Level-1 Selections (Entry questions)
