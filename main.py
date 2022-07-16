@@ -71,12 +71,12 @@ async def on_message(message):
         embed = discord.Embed(title="各種求", color=0x6610f2)
         embed.add_field(name="用以下方式求神明指示",
                         value="""
-                        1. 求事業，請點:pray:\n
-                        2. 求姻緣，請點:kissing_heart:\n
-                        3. 求財富，請點:dollar:\n
-                        4. 求健康，請點:muscle:
+                        1. 求事業，請點🙏\n
+                        2. 求姻緣，請點😘\n
+                        3. 求財富，請點💵\n
+                        4. 求健康，請點💪
         """)
-        ra_list = ['\U0001F64F', '\U0001F60D', '\U0001F4B5', '\U0001F4AA']
+        ra_list = ['🙏', '😘', '💵', '💪']
 
 
     if message.content.startswith('$npc_add'):
@@ -125,17 +125,17 @@ async def on_raw_reaction_add(payload):
     ra_msg_dict = {
         "meo" : 
             {
-            '\U0001F64F': {'msg_t': 'guide_var', 'msg_q': f"Please go to {location} for high pay jobs !"},
-            '\U0001F60D': {'msg_t': 'q_select', 'msg_q': 'Who is your favorite talker?', 'options': {1:"talker-a", 2:"talker-b"}},
-            '\U0001F4B5': {'msg_t': 'guide_var', 'msg_q': 'Please go to XX for good luck !'},
-            '\U0001F4AA': {'msg_t': 'guide_var', 'msg_q': 'Please go to XX and take a look at YY !'}
+            '🙏': {'msg_t': 'guide_var', 'msg_q': f"Please go to {location} for high pay jobs !"},
+            '😘': {'msg_t': 'q_select', 'msg_q': 'Who is your favorite talker?', 'options': {1:"talker-a", 2:"talker-b"}},
+            '💵': {'msg_t': 'guide_var', 'msg_q': 'Please go to XX for good luck !'},
+            '💪': {'msg_t': 'guide_var', 'msg_q': 'Please go to XX and take a look at YY !'}
             },
         "npc" :
             {
-            '\U0001F4B0': {'msg_t': 'q_select', 'msg_q': 'Where did you get the info about PyCon 2022 from ?', 'options': {1:"Facebook", 2:"YouTube", 3:"Others"}} , 
-            '\U0001F4B5': {'msg_t': 'q_select', 'msg_q': 'The highest mountain in Taiwan ?'}, 
-            '\U0001F463': {'msg_t': 'guide_var', 'msg_q': 'Please visit xx in Gather Town, you may find something interesting !'}, 
-            '\U00002753': {'msg_t': 'guide_var', 'msg_q': 'http://tw.pycon.org'}
+            '💰': {'msg_t': 'q_select', 'msg_q': 'Where did you get the info about PyCon 2022 from ?', 'options': {1:"Facebook", 2:"YouTube", 3:"Others"}} , 
+            '💵': {'msg_t': 'q_select', 'msg_q': 'The highest mountain in Taiwan ?'}, 
+            '👣': {'msg_t': 'guide_var', 'msg_q': 'Please visit xx in Gather Town, you may find something interesting !'}, 
+            '❓': {'msg_t': 'guide_var', 'msg_q': 'http://tw.pycon.org'}
             }
     }
 
@@ -150,6 +150,7 @@ async def on_raw_reaction_add(payload):
                 if ra_msg_dict[chan][k]['msg_t'] == 'q_select' :
                     embed_field_value = ""
                     for opt in ra_msg_dict[chan][k]['options']:
+                        embed_field_value += num_ra_list[int(opt) - 1]
                         embed_field_value += ra_msg_dict[chan][k]['options'][opt]
                         embed_field_value += "\n"
                 
