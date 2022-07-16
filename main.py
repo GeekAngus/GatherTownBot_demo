@@ -138,15 +138,16 @@ async def on_raw_reaction_add(payload):
             }
       }
 
-    num_ra_list = [ "1️⃣", "2️⃣", '3️⃣', '4️⃣']
+    num_ra_list = [ '1️⃣', '2️⃣', '3️⃣', '4️⃣' ]
     # Level-1 Selections (Entry questions)
     for chan in ra_msg_dict:
         for k in ra_msg_dict[chan]:
             if str(payload.emoji) == k:
                 embed = discord.Embed(title='', color=0x6610f2) 
                 embed_field_name = ra_msg_dict[chan][k]['msg_q']
-                embed_field_value = "\n"
+                embed_field_value = "To be continue.."
                 if ra_msg_dict[chan][k]['msg_t'] == 'q_select' :
+                    embed_field_value = ""
                     for opt in ra_msg_dict[chan][k]['options']:
                         embed_field_value += ra_msg_dict[chan][k]['options'][opt]
                         embed_field_value += "\n"
