@@ -115,26 +115,33 @@ async def on_raw_reaction_add(payload):
       member = payload.member
       if member.bot:
         return
-        
+      
+      location = "白金攤位"  
       ra_msg_dict = {
         "meo" : 
-            {'\U0001F64F': 'Please go to XX for high pay jobs!',
-            '\U0001F60D': 'Who is your favorite talker?',
-            '\U0001F4B5': 'Please go to XX for luck!',
-            '\U0001F4AA': 'Please go to XX and take a look at YY'
+            {
+            '\U0001F64F': {'msg_t': 'guide_var', 'msg_q': f"Please go to {location} for high pay jobs !"},
+            '\U0001F60D': {'msg_t': 'q_select', 'msg_q': 'Who is your favorite talker?', 'options': {1:"talker-a", 2:"talker-b"}},
+            '\U0001F4B5': {'msg_t': 'guide_var', 'msg_q': 'Please go to XX for good luck !'},
+            '\U0001F4AA': {'msg_t': 'guide_var', 'msg_q': 'Please go to XX and take a look at YY !'}
             },
         "npc" :
-            {'\U0001F4B0': 'Where r u from ?' , 
-             '\U0001F4B5': 'The highest mountain in Taiwan ?', 
-             '\U0001F463': 'Please go to 玉山', 
-             '\U00002753': 'http://pycon.tw'
+            {
+            '\U0001F4B0': {'msg_t': 'q_select', 'msg_q': 'Where did you get the info about PyCon 2022 from ?', 'options': {1:"Facebook", 2:"YouTube", 3:"Others"}} , 
+            '\U0001F4B5': {'msg_t': 'q_select', 'msg_q': 'The highest mountain in Taiwan ?'}, 
+            '\U0001F463': {'msg_t': 'guide_var', 'msg_q': 'Please visit xx in Gather Town, you may find something interesting !'}, 
+            '\U00002753': {'msg_t': 'guide_var', 'msg_q': 'http://tw.pycon.org'}
             }
       }
+
+    # Level-1 Questions
+    for chan in ra_msg_dict:
+        for k in ra_msg_dict[chan]:
+            if str(payload.emoji) == k: 
+                await member.send(ra_msg_dict[chan][k]['msg_q'])
+                
+                
     
-      for chan in ra_msg_dict:
-            for k in ra_msg_dict[chan]:
-                if str(payload.emoji) == k: 
-                    await member.send(ra_msg_dict[chan][k])
 
 #keep_alive()
 
