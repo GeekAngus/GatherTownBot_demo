@@ -88,7 +88,7 @@ async def on_message(message):
                         3. 地圖尋寶，請點:footprints:\n 
                         4. 我有疑問，請點:question:
         """)        
-        ra_list = ['\U0001F4B0', '\U0001F4B5', '\U0001F463', '\U00002753']
+        ra_list = ['💰', '\U0001F4B5', '\U0001F463', '\U00002753']
         #ra_list = ['pray', 'kissing_heart', 'dollar', 'muscle']
     
     if embed is not None:
@@ -138,7 +138,7 @@ async def on_raw_reaction_add(payload):
             }
       }
 
-    num_ra_list = ['\U00000031', '\U00000032', '\U00000033', '\U00000034']
+    num_ra_list = [ "1️⃣", "2️⃣", '3️⃣', '4️⃣']
     # Level-1 Selections (Entry questions)
     for chan in ra_msg_dict:
         for k in ra_msg_dict[chan]:
