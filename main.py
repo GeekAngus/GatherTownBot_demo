@@ -8,6 +8,10 @@ import os
 
 client = discord.Client()
 
+# REF: https://stackoverflow.com/questions/66628327/discord-py-bot-reactions-in-dms
+intents = discord.Intents.default()
+intents.members = True
+
 global g_msg_id
 g_msg_id = 0
 
