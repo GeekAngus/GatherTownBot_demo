@@ -3,6 +3,7 @@
 
 import discord
 import os
+from copy import copy, deepcopy
 #from keep_alive import keep_alive
 
 
@@ -17,6 +18,30 @@ g_msg_id = 0
 
 global ctx 
 ctx = {}
+
+# Restrict the Q&A max to 2 Levels  
+
+# userid: {'rewards': (xp, gold, star),'selected_q': (channel_id, selected_emoji_ucode), 'expected_ans': None}
+global user_track_table
+user_track_table = {}
+
+# use list to store rewards: [xp, gold, starts] to save the space
+default_user_record = {'rewards': [0, 0, 0], 'selected_q': [0, ''], 'q_to_ask_id': 0, 'q_to_ask_ans': [], 'knowledge_q_id': 0, 'expected_ans': [], 'expect_msg_id': 0, 'msg_tye': ""}
+
+# Questions for users in order
+pycon_questions_list = [
+
+{'q':"Where did you know about PyCon 2022 from", 'opts': {1:"Facebook", 2:"YouTube", 3:"Twitter", 4:"Others"}},
+{'q':"How many years of your Python experience", 'opts': {1:"<1", 2:"1-5", 3:">5", 4:">10"}}
+
+]
+
+knowledge_QnA_list = [
+
+{'q':"The highest mountain in Taiwan", 'opts': {1:"玉山", 2:"合歡山", 3:"阿里山"}, 'ans': 3}
+
+]
+
 
 async def get_ctx_from_payload(pl):
 
@@ -120,8 +145,16 @@ async def on_raw_reaction_add(payload):
       if member.bot:
         return
 
-    # payload.member is null for DM  
-    location = "白金攤位"  
+    # init the question menu releated variables    
+    location = "白金攤位"
+
+    # init user related variables
+    if payload.user_id not in user_track_table:
+        user_track_table[payload.user_id] = copy.deepcopy(default_user_record)
+    
+    pycon_q_to_ask = pycon_questions_list[user_track_table[payload.user_id]['q_to_ask_id']]  
+    knowledge_q_to_ask = knowledge_QnA_list[user_track_table[payload.user_id]['knowledge_q_id']]
+
     ra_msg_dict = {
         "meo" : 
             {
@@ -132,21 +165,21 @@ async def on_raw_reaction_add(payload):
             },
         "npc" :
             {
-            '💰': {'msg_t': 'q_select', 'msg_q': 'Where did you get the info about PyCon 2022 from ?', 'options': {1:"Facebook", 2:"YouTube", 3:"Others"}} , 
-            '💵': {'msg_t': 'q_select', 'msg_q': 'The highest mountain in Taiwan ?'}, 
+            '💰': {'msg_t': 'q_select', 'msg_q': f"{pycon_q_to_ask['q']} ?", 'options': {pycon_q_to_ask['opts']}} , 
+            '💵': {'msg_t': 'q_select', 'msg_q': f"{knowledge_q_to_ask['q']} ?", 'options': {{knowledge_q_to_ask['opts']}}}, 
             '👣': {'msg_t': 'guide_var', 'msg_q': 'Please visit xx in Gather Town, you may find something interesting !'}, 
             '❓': {'msg_t': 'guide_var', 'msg_q': 'http://tw.pycon.org'}
             }
     }
 
-    num_ra_list = [ '1️⃣', '2️⃣', '3️⃣', '4️⃣' ]
+    num_ra_list = ['1️⃣', '2️⃣', '3️⃣', '4️⃣']
     # Level-1 Selections (Entry questions)
     for chan in ra_msg_dict:
         for k in ra_msg_dict[chan]:
             if str(payload.emoji) == k:
                 embed = discord.Embed(title='', color=0x6610f2) 
                 embed_field_name = ra_msg_dict[chan][k]['msg_q']
-                embed_field_value = "To be continue.."
+                embed_field_value = "See you soon.."
                 if ra_msg_dict[chan][k]['msg_t'] == 'q_select' :
                     embed_field_value = ""
                     for opt in ra_msg_dict[chan][k]['options']:
@@ -159,11 +192,38 @@ async def on_raw_reaction_add(payload):
                 msg = await member.send(embed=embed)
 
                 if ra_msg_dict[chan][k]['msg_t'] == 'q_select' :
-                    for ra in num_ra_list:
+                    for ra in num_ra_list[:len(ra_msg_dict[chan][k]['options'])]:
                         await msg.add_reaction(ra)
-
+                    # Record the user state for selected questions
+                    user_track_table[payload.user_id]['selected_q'][0] = chan
+                    user_track_table[payload.user_id]['selected_q'][1] = k
                 
+                # keep the msg.id for follow reaction 
+                user_track_table[payload.user_id]['expect_msg_id'] = msg.id
+
+                if k == '💰':
+                    user_track_table[payload.user_id]['msg_tye'] = 'pycon_q'
+                if k == '💵':
+                    user_track_table[payload.user_id]['msg_tye'] = 'knowledge_q'
+                    user_track_table[payload.user_id]['expected_ans'][0] =  knowledge_q_to_ask['ans']   
+                
+                # update [xp, gold, stars]
+                user_track_table[payload.user_id]['rewards'][0] += 1
+
+                # We can escape the loop
+                break
+
     # Level-2 Selections (Answers)
+    if user_track_table[payload.user_id]['expect_msg_id'] == payload.message_id :
+        if str(payload.emoji) == num_ra_list[user_track_table[payload.user_id]['expected_ans'][0] - 1]:
+            user_track_table[payload.user_id]['rewards'][1] += 1
+            # clear the msg.id answered
+            user_track_table[payload.user_id]['expect_msg_id'] = 0
+    
+    # user_track_table[payload.user_id] = {}
+    print({user_track_table})
+
+    # Write user_track_table['rewards'] and ['q_to_ask_ans'] to database 
 
 #keep_alive()
 
