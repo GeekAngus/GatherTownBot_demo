@@ -254,7 +254,8 @@ async def on_raw_reaction_add(payload):
             if str(payload.emoji) in num_ra_list:
                 user_record['rewards'][1] += 1
                 user_record['q_to_ask_ans'].append(num_ra_list[str(payload.emoji)])
-                user_record['q_to_ask_id'] += 1
+                if user_record['q_to_ask_id'] + 1 < len(pycon_questions_list):
+                    user_record['q_to_ask_id'] += 1
                 # clear the msg.id answered
                 user_record['expect_msg_id'] = 0
                 embed_field_name = "Your got a gold!"           
@@ -263,7 +264,8 @@ async def on_raw_reaction_add(payload):
             if str(payload.emoji) in num_ra_list:
                 if num_ra_list[str(payload.emoji)] == user_record['expected_ans'][0]:
                     user_record['rewards'][1] += 1
-                    user_record['knowledge_q_id'] += 1               
+                    if user_record['q_to_ask_id'] + 1 < len(knowledge_QnA_list):
+                        user_record['knowledge_q_id'] += 1               
                     user_record['expected_ans'][0] = 0   
                     # clear the msg.id answered
                     user_record['expect_msg_id'] = 0
