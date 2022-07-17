@@ -150,7 +150,7 @@ async def on_raw_reaction_add(payload):
     #user = await client.fetch_user(payload.user_id)
     #print(user)
 
-    # From Direct Messages: payload guild is None that member is None
+    # From Direct Messages: payload guild is None that member is None from bot
     if payload.member is None:
         if payload.user_id not in user_track_table:
             return
@@ -249,14 +249,13 @@ async def on_raw_reaction_add(payload):
 
     # Level-2 Selections (Answers)
     if user_record['expect_msg_id'] == payload.message_id :
-        
         if user_record['msg_tye'] == 'pycon_q':
             if str(payload.emoji) in num_ra_list:
                 user_record['rewards'][1] += 1
                 user_record['q_to_ask_ans'].append(num_ra_list[str(payload.emoji)])
                 user_record['q_to_ask_id'] += 1
                 # clear the msg.id answered
-                user_record['expect_msg_id'] = 0                
+                user_record['expect_msg_id'] = 0           
         
         if user_record['expected_ans'][0] > 0:
             if str(payload.emoji) in num_ra_list:
@@ -266,6 +265,16 @@ async def on_raw_reaction_add(payload):
                     user_record['expected_ans'][0] = 0   
                     # clear the msg.id answered
                     user_record['expect_msg_id'] = 0
+
+        embed = discord.Embed(title='', color=0x6610f2) 
+        embed_field_name = "Your got a gold!"
+        embed_field_value = "You have: "
+        embed_field_value += f"Gold: {str(user_record['rewards'][1])} "
+        embed_field_value += f"Stars: {str(user_record['rewards'][2])}"
+        embed.add_field(name = embed_field_name, value = embed_field_value)
+        
+        user = await client.fetch_user(payload.user_id)
+        await user.send(embed=embed)               
 
     # user_track_table[payload.user_id] = {}
     print(user_track_table)
