@@ -249,7 +249,7 @@ async def on_raw_reaction_add(payload):
 
     # Level-2 Selections (Answers)
     if user_record['expect_msg_id'] == payload.message_id :
-        embed_field_name = ""
+        embed_field_name = "Rewards"
         if user_record['msg_tye'] == 'pycon_q':
             if str(payload.emoji) in num_ra_list:
                 user_record['rewards'][1] += 1
