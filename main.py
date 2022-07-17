@@ -181,7 +181,7 @@ async def on_raw_reaction_add(payload):
     else:
         pycon_q_to_ask = {'q':"You had completed all Q&A, thank you !", 'opts': {}} 
 
-    if user_record['q_to_ask_id'] < len(knowledge_QnA_list):
+    if user_record['knowledge_q_id'] < len(knowledge_QnA_list):
         knowledge_q_to_ask = knowledge_QnA_list[user_record['knowledge_q_id']]
     else:
         knowledge_q_to_ask = {'q':"You had completed all Q&A, thank you !", 'opts': {}, 'ans': 0}
