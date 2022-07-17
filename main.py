@@ -150,7 +150,7 @@ async def on_raw_reaction_add(payload):
 
     # init user related variables
     if payload.user_id not in user_track_table:
-        user_track_table[payload.user_id] = copy.deepcopy(default_user_record)
+        user_track_table[payload.user_id] = deepcopy(default_user_record)
     
     pycon_q_to_ask = pycon_questions_list[user_track_table[payload.user_id]['q_to_ask_id']]  
     knowledge_q_to_ask = knowledge_QnA_list[user_track_table[payload.user_id]['knowledge_q_id']]
