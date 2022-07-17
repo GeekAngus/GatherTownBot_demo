@@ -176,8 +176,15 @@ async def on_raw_reaction_add(payload):
     
     user_record = user_track_table[payload.user_id]
 
-    pycon_q_to_ask = pycon_questions_list[user_record['q_to_ask_id']]  
-    knowledge_q_to_ask = knowledge_QnA_list[user_record['knowledge_q_id']]
+    if user_record['q_to_ask_id'] < len(pycon_questions_list):
+        pycon_q_to_ask = pycon_questions_list[user_record['q_to_ask_id']] 
+    else:
+        pycon_q_to_ask = {'q':"You had completed all Q&A, thank you !", 'opts': {}} 
+
+    if user_record['q_to_ask_id'] < len(knowledge_QnA_list):
+        knowledge_q_to_ask = knowledge_QnA_list[user_record['knowledge_q_id']]
+    else:
+        knowledge_q_to_ask = {'q':"You had completed all Q&A, thank you !", 'opts': {}, 'ans': 0}
 
     ra_msg_dict = {
         'meo' : 
@@ -254,8 +261,7 @@ async def on_raw_reaction_add(payload):
             if str(payload.emoji) in num_ra_list:
                 user_record['rewards'][1] += 1
                 user_record['q_to_ask_ans'].append(num_ra_list[str(payload.emoji)])
-                if user_record['q_to_ask_id'] + 1 < len(pycon_questions_list):
-                    user_record['q_to_ask_id'] += 1
+                user_record['q_to_ask_id'] += 1
                 # clear the msg.id answered
                 user_record['expect_msg_id'] = 0
                 embed_field_name = "Your got a gold!"           
@@ -264,8 +270,7 @@ async def on_raw_reaction_add(payload):
             if str(payload.emoji) in num_ra_list:
                 if num_ra_list[str(payload.emoji)] == user_record['expected_ans'][0]:
                     user_record['rewards'][1] += 1
-                    if user_record['q_to_ask_id'] + 1 < len(knowledge_QnA_list):
-                        user_record['knowledge_q_id'] += 1               
+                    user_record['knowledge_q_id'] += 1               
                     user_record['expected_ans'][0] = 0   
                     # clear the msg.id answered
                     user_record['expect_msg_id'] = 0
