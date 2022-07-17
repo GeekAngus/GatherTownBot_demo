@@ -212,7 +212,8 @@ async def on_raw_reaction_add(payload):
                 embed_field_name = ra_msg_dict[chan][k]['msg_q']
                 embed_field_value = "See you soon.."
                 if ra_msg_dict[chan][k]['msg_t'] == 'q_select' :
-                    embed_field_value = ""
+                    if len(ra_msg_dict[chan][k]['options']) > 0:
+                        embed_field_value = ""
                     for opt in ra_msg_dict[chan][k]['options']:
                         embed_field_value += [*num_ra_list][int(opt) - 1]
                         embed_field_value += ra_msg_dict[chan][k]['options'][opt]
