@@ -165,8 +165,8 @@ async def on_raw_reaction_add(payload):
             },
         "npc" :
             {
-            '💰': {'msg_t': 'q_select', 'msg_q': f"{pycon_q_to_ask['q']} ?", 'options': {pycon_q_to_ask['opts']}} , 
-            '💵': {'msg_t': 'q_select', 'msg_q': f"{knowledge_q_to_ask['q']} ?", 'options': {{knowledge_q_to_ask['opts']}}}, 
+            '💰': {'msg_t': 'q_select', 'msg_q': f"{pycon_q_to_ask['q']} ?", 'options': f"{pycon_q_to_ask['opts']}"} , 
+            '💵': {'msg_t': 'q_select', 'msg_q': f"{knowledge_q_to_ask['q']} ?", 'options': f"{knowledge_q_to_ask['opts']}"}, 
             '👣': {'msg_t': 'guide_var', 'msg_q': 'Please visit xx in Gather Town, you may find something interesting !'}, 
             '❓': {'msg_t': 'guide_var', 'msg_q': 'http://tw.pycon.org'}
             }
