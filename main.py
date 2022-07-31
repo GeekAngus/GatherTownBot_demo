@@ -4,6 +4,17 @@
 import discord
 import os
 from copy import copy, deepcopy
+#from keyifylist import KeyifyList
+import pqdict
+# from pqdict import PQDict
+
+#from pqdict import heapsorted_by_value
+
+
+# billionaires = {'Bill Gates': 72.7, 'Warren Buffett': 60.0, ...}
+# top10_richest = heapsorted_by_value(billionaires, maxheap=True)[:10]
+
+# prio_queue = queue.PriorityQueue()
 #from keep_alive import keep_alive
 
 
@@ -45,6 +56,25 @@ knowledge_QnA_list = [
 {'q':"桃園大溪最有名的小吃是", 'opts': {1:"豆乾", 2:"豆花", 3:"豆漿", 3:"花生糖"}, 'ans': 1}
 
 ]
+
+rank_list = []
+
+rank_pq = pqdict.pqdict(reverse = True)
+
+rank_dict = {}
+
+def rank_update (user_id, gold):
+    #import bisect
+    #l_indx = bisect.bisect_left(KeyifyList(rank_list, lambda x: x[1]), gold)
+    #rank_list.insert(l_indx, (user_id, gold))
+    if user_id in rank_pq:
+        rank_pq.updateitem(user_id, gold)
+    else:
+        rank_pq.additem(user_id, gold)     
+
+    #rank_dict[user_id] = gold
+    return
+
 
 
 async def get_ctx_from_payload(pl):
@@ -91,6 +121,7 @@ async def get_ctx_from_payload(pl):
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
+    # Load user data and init user track table
 
 
 @client.event
@@ -102,27 +133,45 @@ async def on_message(message):
         await message.channel.send('Hello!')
 
     embed = None
+    ra_list = []
+    if message.content.startswith('$rank'):
+        embed = discord.Embed(title="目前排名", color=0x6610f2)
+        embed_field_name = "Rank by Gold"
+        embed_field_value = "Rank:\n"
+        # for user_id, gold in reversed(rank_list):
+        _rank_pq_copy = rank_pq.copy()
+        for user_id in _rank_pq_copy:
+        # rank_sorted = pqdict.nlargest(len(rank_dict), rank_dict)
+        #for user_id in rank_sorted:
+            user = await client.fetch_user(user_id)
+            embed_field_value += user.name + ":" + str(_rank_pq_copy[user_id]) + "\n"
+
+        embed.add_field(name = embed_field_name, value = embed_field_value)
+
+        # ra_list = []          
+
+
     if message.content.startswith('$meo_add'):
-        embed = discord.Embed(title="各種求", color=0x6610f2)
-        embed.add_field(name="用以下方式求神明指示",
-                        value="""
-                        1. 求事業，請點🙏\n
-                        2. 求姻緣，請點😘\n
-                        3. 求財富，請點㊗️\n
-                        4. 求健康，請點💪
-        """)
+        embed = discord.Embed(title="有求必應", color=0x6610f2)
+        embed.add_field(name="用以下方式求指示",
+                        value=
+                        "1. 求事業，請點🙏\n" +
+                        "2. 求姻緣，請點😘\n" +
+                        "3. 求財富，請點㊗️\n" +
+                        "4. 求健康，請點💪"
+        )
         ra_list = ['🙏', '😘', '㊗️', '💪']
 
 
     if message.content.startswith('$npc_add'):
         embed = discord.Embed(title="我是路人甲", color=0x6610f2)
         embed.add_field(name="用以下方式與我互動",
-                        value="""
-                        1. 閒聊得金幣, 請點💰\n
-                        2. 知識換金幣, 請點💵\n
-                        3. 地圖尋寶，請點👣\n 
-                        4. 我有疑問，請點❓
-        """)        
+                        value=
+                        "1. 閒聊得金幣, 請點💰\n" +
+                        "2. 知識換金幣, 請點💵\n" +
+                        "3. 地圖尋寶，請點👣\n" + 
+                        "4. 有其它疑問，請點❓"
+        )        
         ra_list = ['💰', '💵', '👣', '❓']
     
     if embed is not None:
@@ -286,6 +335,7 @@ async def on_raw_reaction_add(payload):
         user = await client.fetch_user(payload.user_id)
         await user.send(embed=embed)               
 
+    rank_update(payload.user_id, user_record['rewards'][1])
     # user_track_table[payload.user_id] = {}
     print(user_track_table)
 
